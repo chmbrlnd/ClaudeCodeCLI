@@ -228,12 +228,12 @@ Normal Mode  →  Auto-Accept Mode  →  Plan Mode  →  (back to Normal)
 **Normal Mode (default):** Claude asks permission before editing files or
 running commands.  You approve each action.
 
-**Auto-Accept Mode (`⏵⏵ accept edits on`):** Claude automatically applies
+**Auto-Accept Mode (`>> accept edits on`):** Claude automatically applies
 file edits without asking.  Bash commands still follow your settings.json
 rules.  This is the sweet spot for productive coding sessions where you trust
 Claude's direction but want destructive commands gated.
 
-**Plan Mode (`⏸ plan mode on`):** Read-only, no changes possible.
+**Plan Mode (`|| plan mode on`):** Read-only, no changes possible.
 
 ### How Auto-Accept Interacts With settings.json
 

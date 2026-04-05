@@ -53,9 +53,9 @@ A movable pointer to a commit.  When you create a branch, you're saying
 is usually called `main`.
 
 ```
-main:    A → B → C
-                  ↘
-feature:           D → E
+main:    A -- B -- C
+                    \
+feature:             D -- E
 ```
 
 ### Remote

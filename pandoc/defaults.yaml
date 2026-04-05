@@ -11,7 +11,7 @@ variables:
   fontsize: 11pt
   geometry:
     - margin=1in
-  mainfont: Palatino
+  mainfont: "TeX Gyre Pagella"
   monofont: Menlo
   linestretch: 1.15
   colorlinks: true
