@@ -1,0 +1,27 @@
+# Pandoc defaults for Claude Code CLI workshop
+# Usage: pandoc --defaults pandoc/defaults.yaml
+
+from: markdown+yaml_metadata_block+smart+fenced_code_blocks+backtick_code_blocks+fenced_code_attributes+line_blocks+table_captions+pipe_tables+raw_tex+header_attributes+implicit_header_references+definition_lists+fancy_lists+startnum+strikeout+superscript+subscript
+
+pdf-engine: lualatex
+
+variables:
+  documentclass: article
+  papersize: letter
+  fontsize: 11pt
+  geometry:
+    - margin=1in
+  mainfont: Palatino
+  monofont: Menlo
+  linestretch: 1.15
+  colorlinks: true
+  linkcolor: Navy
+  urlcolor: Navy
+  citecolor: Navy
+
+highlight-style: tango
+number-sections: true
+
+metadata:
+  author: JF
+  lang: en-US
