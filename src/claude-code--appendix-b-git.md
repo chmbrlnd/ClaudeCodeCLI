@@ -3,7 +3,7 @@ title: "Appendix B: A Git Primer"
 date: 2026-04-05
 version: 0.1
 status: draft
-owner: JF
+owner: JFC
 review-due: 2026-10-05
 ---
 
@@ -100,7 +100,8 @@ git diff --staged       # see staged changes (what will be committed)
 # Stage changes
 git add file.py         # stage a specific file
 git add src/            # stage an entire directory
-git add -A              # stage everything (use with caution)
+git add -u              # stage changes to tracked files only (safe default)
+git add -A              # also stage untracked files (use with caution)
 
 # Commit
 git commit -m "Add user login feature"
@@ -111,39 +112,57 @@ git log --oneline       # compact one-line-per-commit view
 git log --graph         # visual branch/merge graph
 ```
 
-### Branching
-
-```bash
-# Create and switch to a new branch
-git switch -c feature/auth
-
-# Switch to an existing branch
-git switch main
-
-# List branches
-git branch              # local branches
-git branch -r           # remote branches
-
-# Merge a branch into the current one
-git merge feature/auth
-
-# Delete a branch (after merging)
-git branch -d feature/auth
-```
-
 ### Working With Remotes
 
 ```bash
-# Push your branch to the remote
-git push -u origin feature/auth    # first time (sets upstream)
-git push                           # subsequent pushes
+# Push your commits to the remote
+git push
 
 # Pull changes from the remote
-git pull                           # fetch + merge
+git pull                           # fetch + merge (default)
+git pull --rebase                  # fetch + rebase (cleaner history)
 
 # See what remotes are configured
 git remote -v
 ```
+
+### When Origin and Local Diverge
+
+If you've made commits locally and someone else has pushed commits to
+`origin` in the meantime, `git push` will be rejected — the two histories
+have diverged and Git won't silently pick a winner.
+
+The fix is to replay your local commits on top of what's now on the
+remote.  That's a **rebase**:
+
+```bash
+git fetch origin                   # see what's new on the remote
+git rebase origin/main             # replay your commits on top of it
+git push                           # now push the rebased history
+```
+
+Or, as a one-liner:
+
+```bash
+git pull --rebase                  # fetch + rebase in one step
+git push
+```
+
+**Why rebase instead of merge?**  A plain `git pull` creates a merge
+commit every time histories diverge, littering the log with "Merge
+branch 'main'" entries.  Rebasing keeps the history linear — your
+commits appear as if you'd written them after the latest remote
+changes.
+
+**If rebase hits a conflict**, Git pauses and shows the conflicted files.
+Resolve them (see *Merge Conflicts* below), then:
+
+```bash
+git add <resolved-file>
+git rebase --continue
+```
+
+To abort and go back to where you started: `git rebase --abort`.
 
 ---
 
@@ -154,23 +173,20 @@ git remote -v
 git clone https://github.com/team/project.git
 cd project
 
-# 2. Create a feature branch
-git switch -c feature/user-profiles
-
-# 3. Make your changes
+# 2. Make your changes
 #    (edit files, add features, fix bugs)
 
-# 4. Stage your changes
+# 3. Stage your changes
 git add src/profiles.py tests/test_profiles.py
 
-# 5. Commit with a descriptive message
+# 4. Commit with a descriptive message
 git commit -m "Add user profile page with avatar upload"
 
-# 6. Push to the remote
-git push -u origin feature/user-profiles
+# 5. Sync with the remote (in case others pushed while you were working)
+git pull --rebase
 
-# 7. Open a pull request on GitHub
-#    (or use: gh pr create --title "Add user profiles")
+# 6. Push to the remote
+git push
 ```
 
 ---

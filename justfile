@@ -52,6 +52,7 @@ book:
     mkdir -p build
     pandoc src/claude-code--*.md \
       --defaults pandoc/defaults.yaml \
+      --metadata title="Claude Code CLI Workshop" \
       --toc --toc-depth=2 \
       -o build/claude-code-master.pdf
 

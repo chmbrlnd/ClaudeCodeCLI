@@ -3,7 +3,7 @@ title: "Appendix A: Software Setup"
 date: 2026-04-05
 version: 0.1
 status: draft
-owner: JF
+owner: JFC
 review-due: 2026-10-05
 ---
 
@@ -19,7 +19,7 @@ during the session.
 
 ### Homebrew (macOS Package Manager)
 
-If not already installed:
+If not already installed, see [brew.sh](https://brew.sh) for the official installer, or run:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -32,6 +32,8 @@ brew --version
 ```
 
 ### Git via Xcode Command Line Tools
+
+Xcode must already be installed on your system.
 
 ```bash
 xcode-select --install
@@ -52,6 +54,8 @@ python3 --version && pip3 --version
 ---
 
 ## VS Code
+
+Visual Studio Code is an open-source code editor originally developed by Microsoft.
 
 ### Installation
 
@@ -76,10 +80,7 @@ cd your-project
 python3 -m venv .venv
 ```
 
-VS Code should auto-detect the `.venv`.  If not, open the Command Palette
-(Cmd+Shift+P), select "Python: Select Interpreter," and choose the one
-inside `.venv`.
-
+VS Code should auto-detect the `.venv`.  
 To make this sticky per-project, add `.vscode/settings.json`:
 
 ```json
@@ -105,18 +106,17 @@ claude --version
 The Homebrew install requires no Node.js and integrates with your system PATH.
 It does not auto-update; run `brew upgrade claude-code` periodically.
 
-### CLI — npm (Alternative)
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
 ### VS Code Extension
 
 Open Extensions (Cmd+Shift+X), search "Claude Code," click Install.
 Authentication is shared between the CLI and the extension — sign in once.
 
-### Authentication
+### Subscription and Authentication
+
+This step requires an active Claude subscription — either a personal plan
+through [Anthropic](https://www.anthropic.com/pricing) (Pro or Max) or
+institutional access provided through
+[Texas A&M University](https://www.it.tamu.edu/ai-services/ai-services-comparison.html).
 
 Run `claude` in your terminal.  The first time, it opens a browser tab.
 Sign in with your Claude Pro or Max plan, or paste an Anthropic Console API
@@ -142,38 +142,84 @@ claude --help         # see all available flags
 
 Claude Code's behavior is controlled by `~/.claude/settings.json`.  This
 file manages three things: **permissions**, **sandbox**, and **network
-access**.
+access**.  The right posture depends on the machine: supervised work on a
+computer that holds sensitive data looks very different from unsupervised
+runs on a dedicated sandbox machine.  The two configurations below
+correspond to the author's own two-machine workflow.
 
-### Permissions: Allow / Ask / Deny
+### Settings on a Personal Computer
 
-**Allow (runs without prompting):**
-`git status`, `git diff`, `git add`, `git commit`, `git log`, `python`,
-`python3`, `pip install`, `pytest`, `ls`, `cat`, `head`, `tail`, `wc`,
-`grep`, `find`, `mkdir`.
+This is the right default for any Mac that holds SSH keys, API
+credentials, client work, or personal files.  Claude runs **supervised**
+— you're at the keyboard, confirming destructive actions.  Strict
+defaults make that supervision light-touch.
 
-**Ask (Claude will prompt before running):**
-`git push`, `git checkout`, `git branch -d`, `rm`.  These are potentially
-destructive — you'll confirm each one.
+**Permissions: Allow / Ask / Deny**
 
-**Deny (blocked entirely):**
-Reading `~/.ssh/`, `~/.aws/`, `~/.gnupg/`, `~/.config/gcloud/`, `.env`,
-`.env.*`, and `./secrets/`.  Claude cannot access these regardless of what
-you tell it.
+- **Allow (runs without prompting):**
+  `git status`, `git diff`, `git add`, `git commit`, `git log`, `python`,
+  `python3`, `pip install`, `pytest`, `ls`, `cat`, `head`, `tail`, `wc`,
+  `grep`, `find`, `mkdir`.
+- **Ask (Claude will prompt before running):**
+  `git push`, `git checkout`, `git branch -d`, `rm`.  These are
+  potentially destructive — you'll confirm each one.
+- **Deny (blocked entirely):**
+  Reading `~/.ssh/`, `~/.aws/`, `~/.gnupg/`, `~/.config/gcloud/`, `.env`,
+  `.env.*`, and `./secrets/`.  Claude cannot access these regardless of
+  what you tell it.
 
-### Sandbox Settings
+**Sandbox**
 
 - `sandbox.enabled: true` — bash commands run in a restricted container.
-- `autoAllowBashIfSandboxed: true` — because commands are sandboxed, Claude
-  skips the permission prompt for them.  **This is why most commands just
-  run.**
-- `allowUnsandboxedCommands: false` — anything that can't be sandboxed and
-  isn't in the allow list is blocked (not prompted).
+- `autoAllowBashIfSandboxed: true` — because commands are sandboxed,
+  Claude skips the permission prompt for them.  **This is why most
+  commands just run.**
+- `allowUnsandboxedCommands: false` — anything that can't be sandboxed
+  and isn't in the allow list is blocked (not prompted).
 
-### Network Access
+**Network**
 
 Only these domains are reachable from within the sandbox: google.com,
 orcid.org, github.com, npmjs.org, pypi.org, and their subdomains.
 Everything else is blocked.
+
+### Settings on a Mini Sandbox
+
+A dedicated machine — in the author's case, a Mac mini — used for long,
+unattended Claude runs.  The guiding assumption is that **no sensitive
+data lives on this machine**, and that reimaging it is a realistic
+recovery path if something goes wrong.  That assumption lets you trade
+prompts for throughput.  It does **not** mean "anything goes": Claude's
+activity stays confined to `~/Sandbox/**` so a mistake inside that tree
+is the worst that can happen.
+
+**Permissions (looser)**
+
+- **Allow** expands to include everything from the Personal Computer
+  list, plus `git push`, `git checkout`, `git branch -d`, `rm` within
+  `~/Sandbox/**`, `brew install`, package managers, and test runners.
+- **Ask** shrinks to near-empty — reserved for destructive operations
+  that would touch paths outside `~/Sandbox/**`.
+- **Deny** still blocks `~/.ssh/`, `~/.aws/`, and `.env` files as
+  belt-and-suspenders, even though nothing sensitive should be on this
+  machine by convention.
+
+**Scope confinement**
+
+Launch Claude from inside `~/Sandbox/**`, and avoid `--add-dir` pointing
+outside that tree.  Unsupervised sessions should have their blast radius
+bounded by construction, not by trust.
+
+**Sandbox & network**
+
+- Keep `sandbox.enabled: true`.  It costs nothing and catches mistakes.
+- The network allow-list can be broadened as needed for the tasks this
+  machine runs (extra registries, documentation sites).  Treat each
+  addition as a judgment call, not a recipe.
+
+If this machine ever accumulates something you'd regret losing, it has
+stopped being a sandbox — move that data off, or tighten the settings
+back toward the Personal Computer profile.
 
 ### Am I in the Right Mode?
 

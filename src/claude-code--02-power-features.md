@@ -3,7 +3,7 @@ title: "Power Features"
 date: 2026-04-05
 version: 0.1
 status: draft
-owner: JF
+owner: JFC
 review-due: 2026-10-05
 ---
 
