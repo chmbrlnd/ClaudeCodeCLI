@@ -1,0 +1,25 @@
+# Pandoc defaults for Beamer slide decks
+# Usage: pandoc --defaults pandoc/slides-defaults.yaml
+
+from: markdown+yaml_metadata_block+smart+fenced_code_blocks+backtick_code_blocks+fenced_code_attributes+line_blocks+table_captions+pipe_tables+raw_tex+header_attributes+implicit_header_references+definition_lists+fancy_lists+startnum+strikeout+superscript+subscript
+
+to: beamer
+pdf-engine: lualatex
+slide-level: 2
+
+variables:
+  aspectratio: 169
+  theme: metropolis
+  fontsize: 11pt
+  mainfont: "TeX Gyre Pagella"
+  monofont: Menlo
+  colorlinks: true
+  linkcolor: Navy
+  urlcolor: Navy
+
+highlight-style: tango
+
+metadata:
+  author: "ECEN Sparks Series"
+  date: "April 2026"
+  lang: en-US
