@@ -97,6 +97,40 @@ check:
       exit 1
     fi
 
+# Build a single slide deck to PDF
+slides file:
+    mkdir -p build
+    pandoc slides/{{file}}.md \
+      --defaults pandoc/slides-defaults.yaml \
+      -o build/{{file}}--slides.pdf
+
+# Build all slide decks to PDF
+slides-all:
+    #!/usr/bin/env bash
+    mkdir -p build
+    for f in slides/*.md; do
+      base=$(basename "$f" .md)
+      pandoc "$f" \
+        --defaults pandoc/slides-defaults.yaml \
+        -o "build/${base}--slides.pdf"
+    done
+
+# Build master slide deck — all slides concatenated
+slides-book:
+    #!/usr/bin/env bash
+    mkdir -p build
+    # Strip per-file YAML frontmatter so the book metadata wins
+    combined=$(mktemp)
+    for f in slides/*.md; do
+      sed '/^---$/,/^---$/d' "$f" >> "$combined"
+      printf '\n\n' >> "$combined"
+    done
+    pandoc "$combined" \
+      --defaults pandoc/slides-defaults.yaml \
+      --metadata-file pandoc/slides-book-meta.yaml \
+      -o build/claude-code-slides.pdf
+    rm "$combined"
+
 # Clean build artifacts
 clean:
     rm -rf build/*

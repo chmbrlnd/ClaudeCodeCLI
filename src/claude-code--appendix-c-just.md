@@ -192,10 +192,10 @@ just check
 
 ```bash
 # Build the PDF
-just pdf claude-code--00-foundations
+just pdf claude-code--01-foundations
 
 # Archive it with a version tag
-just publish claude-code--00-foundations v1.0
+just publish claude-code--01-foundations v1.0
 ```
 
 This copies the PDF to `archive/` with a date stamp and creates a Git tag

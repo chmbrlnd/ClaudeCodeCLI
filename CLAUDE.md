@@ -8,16 +8,19 @@ A Markdown-is-source-code workshop on Claude Code, built with Pandoc and Just.
 justfile                        # build recipes (just --list)
 pandoc/
   defaults.yaml                 # pandoc config (fonts, margins, pdf-engine)
+  slides-defaults.yaml          # beamer config for slide decks
   reference.docx                # Word template for DOCX output
 src/
   INDEX.md                      # manifest of all lesson files
-  claude-code--00-foundations.md
-  claude-code--01-making-it-personal.md
-  claude-code--02-power-features.md
-  claude-code--03-autonomous-use.md
+  claude-code--00-overview.md
+  claude-code--01-foundations.md
+  claude-code--02-making-it-personal.md
+  claude-code--03-power-features.md
+  claude-code--04-autonomous-use.md
   claude-code--appendix-a-setup.md
   claude-code--appendix-b-git.md
   claude-code--appendix-c-just.md
+slides/                         # beamer decks — one per lesson (just slides-all)
 build/                          # gitignored — ephemeral build artifacts
 archive/                        # committed — frozen PDFs of record
 ```
@@ -29,6 +32,7 @@ just                  # list all recipes
 just pdf-all          # build all lessons as PDF
 just docx-all         # build all lessons as DOCX
 just book             # master PDF with table of contents
+just slides-all       # build all slide decks as PDF
 just check            # validate front matter, INDEX sync, staleness
 just clean            # remove build artifacts
 ```
@@ -50,3 +54,4 @@ Requires: [Pandoc](https://pandoc.org/), LuaLaTeX, [just](https://github.com/cas
 | 2026-04-04 | 0.2 | Integrated architectural framing | JF |
 | 2026-04-04 | 0.3 | Integrated setup guide | JF |
 | 2026-04-05 | 0.4 | Repository build-out — lesson files, appendices, build infrastructure | JF |
+| 2026-06-03 | 0.5 | Slide decks; overview folded in from LESSON.md; lessons renumbered 01–04; editorial pass | JF |

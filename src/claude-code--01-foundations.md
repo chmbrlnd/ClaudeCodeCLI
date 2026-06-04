@@ -102,16 +102,13 @@ charging ahead in the wrong direction.
 **The Plan Mode workflow:**
 
 1. **Enter Plan Mode** (`Shift+Tab` twice, or `--permission-mode plan`)
-2. **Describe what you want** — "I need to refactor the auth system to use
-   OAuth2"
+2. **Describe what you want** — "Refactor the auth system to use OAuth2"
 3. **Claude explores and proposes a plan** — it reads files, traces
-   dependencies, identifies what needs to change
-4. **Refine the plan** — ask follow-up questions: "What about backward
-   compatibility?" or "Can you break this into smaller steps?"
-5. **Edit the plan** — press `Ctrl+G` to open the plan in your editor
-6. **Switch to Normal Mode** — press `Shift+Tab` to cycle back
-7. **Claude executes the plan** — it already knows what to do from the
-   planning phase
+   dependencies, and identifies what needs to change
+4. **Refine** — ask follow-ups: "What about backward compatibility?" or
+   "Break this into smaller steps"
+5. **Approve and switch to Normal Mode** (`Shift+Tab`) — Claude executes the
+   plan it already worked out
 
 Use Plan Mode for anything that touches more than a couple of files, involves
 architectural decisions, or where you'd want a human developer to explain

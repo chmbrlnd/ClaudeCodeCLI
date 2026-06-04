@@ -30,19 +30,14 @@ directory *is* the context.
 
 ### Keeping Your Mac Awake
 
-Claude Code sessions can run for a while.  Use the built-in `caffeinate`
-command to prevent sleep:
+Long sessions can outlast your screen-sleep timer.  Wrap the command in
+`caffeinate` to keep the Mac awake until Claude exits:
 
 ```bash
-# Wrap your Claude command — sleep is prevented until Claude exits
 caffeinate -dims claude -p "your long task here"
-
-# Or if Claude is already running in another tab, open a second tab:
-caffeinate -dims -t 14400    # stay awake for 4 hours
 ```
 
-Flags: `-d` display, `-i` idle, `-m` disk, `-s` system (even on battery).
-When the command or timer ends, normal sleep resumes.
+See Appendix A for the flag breakdown and a standalone timer variant.
 
 ### Session Hygiene
 
@@ -381,16 +376,14 @@ reasons:
   window is an improvement along one axis; random addressability is an
   improvement along an orthogonal axis.  They are not substitutes.
 
-### Demand Paging
+### The Filesystem as Scratchpad
 
-Claude Code's filesystem enables **demand paging**: loading exactly the needed
-information at the top of the current attention window, where it receives
-maximal weight.
-
-The filesystem also acts as a **persistent scratchpad** — when the model
-writes to a file in step 3 and reads it back in step 7, it has external
-working memory that survives between reasoning steps.  This enables problem
-decomposition strategies that would be impossible with purely internal state.
+Beyond demand paging (Lesson 01), the filesystem acts as a **persistent
+scratchpad**: when the model writes to a file in step 3 and reads it back in
+step 7, it has external working memory that survives between reasoning steps.
+This enables problem-decomposition strategies that pure internal state can't
+support — and it's why a fuller context window isn't a substitute for
+structured external memory.
 
 ### Strategies for Managing Context
 

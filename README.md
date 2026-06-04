@@ -16,8 +16,8 @@ just clean            # wipe build/
 One-off builds take a filename (no extension):
 
 ```bash
-just pdf  claude-code--00-foundations
-just docx claude-code--02-power-features
+just pdf  claude-code--01-foundations
+just docx claude-code--03-power-features
 ```
 
 Outputs land in `build/` (gitignored).
@@ -27,10 +27,11 @@ Outputs land in `build/` (gitignored).
 | Path | What |
 |------|------|
 | `src/INDEX.md` | Manifest of all lesson files |
-| `src/claude-code--00-foundations.md` | Core thesis, prompts, permissions |
-| `src/claude-code--01-making-it-personal.md` | Terminal, CLAUDE.md, context, sessions |
-| `src/claude-code--02-power-features.md` | Models, flags, slash commands, skills, hooks |
-| `src/claude-code--03-autonomous-use.md` | MCP, sub-agents, headless, worktrees |
+| `src/claude-code--00-overview.md` | Orientation, goals, workshop map |
+| `src/claude-code--01-foundations.md` | Core thesis, prompts, permissions |
+| `src/claude-code--02-making-it-personal.md` | Terminal, CLAUDE.md, context, sessions |
+| `src/claude-code--03-power-features.md` | Models, flags, slash commands, skills, hooks |
+| `src/claude-code--04-autonomous-use.md` | MCP, sub-agents, headless, worktrees |
 | `src/claude-code--appendix-a-setup.md` | Software install + settings reference |
 | `src/claude-code--appendix-b-git.md` | Git primer |
 | `src/claude-code--appendix-c-just.md` | `just` primer |
@@ -51,8 +52,8 @@ brew install --cask mactex   # provides lualatex for PDF output
 ## Publish a release
 
 ```bash
-just pdf    claude-code--00-foundations
-just publish claude-code--00-foundations v1.0
+just pdf    claude-code--01-foundations
+just publish claude-code--01-foundations v1.0
 ```
 
 Copies the PDF to `archive/YYYY-MM-DD--<file>--v1.0.pdf`, commits it, and tags the repo.
